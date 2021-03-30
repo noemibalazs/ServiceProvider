@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">Service Provider</string>
+
+    <string name="work_manager_title">Work Manager</string>
+    <string name="download_manager_title">Download Manager</string>
+    <string name="alarm_manager_title">Alarm Manager</string>
+    <string name="foreground_service_title">ForeGround Service</string>
+    <string name="order_lunch_title">Order Lunch</string>
+
+    <string name="txt_choose_a_photo">Choose a photo</string>
+    <string name="txt_upload_photo">Upload</string>
+    <string name="txt_cancel_photo">Cancel</string>
+    <string name="txt_see_photo">Uploaded photo</string>
+
+    <string name="txt_download_photo">Download photo</string>
+    <string name="txt_set_alarm">Set alarm</string>
+    <string name="txt_your_daily_alarm_toast">Your daily alarm is set at %s hour to order your lunch.</string>
+    <string name="txt_notification_title">Lunch alarm</string>
+    <string name="txt_notification_content">It\'s time to order your lunch!\nJust click on the dial button!</string>
+    <string name="txt_play_music">Start foreground service</string>
+    <string name="txt_artist_title"><b>Artist</b>: Michael Jackson</string>
+    <string name="txt_song_title"><b>Song</b>: Who is it</string>
+</resources>

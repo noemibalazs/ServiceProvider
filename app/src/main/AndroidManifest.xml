@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.noemi.android.serviceprovider">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+
+    <application
+        android:name=".application.App"
+        android:allowBackup="true"
+        android:icon="@drawable/icon"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.ServiceProvider">
+        <activity
+            android:name=".landing.LandingServiceActivity"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".workManager.select.SelectImageActivity"
+            android:label="@string/work_manager_title"
+            android:parentActivityName=".landing.LandingServiceActivity"
+            android:screenOrientation="portrait">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".landing.LandingServiceActivity" />
+        </activity>
+        <activity
+            android:name=".workManager.upload.UploadImageActivity"
+            android:label="@string/work_manager_title"
+            android:parentActivityName=".landing.LandingServiceActivity"
+            android:screenOrientation="portrait">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".landing.LandingServiceActivity" />
+        </activity>
+        <activity
+            android:name=".downLoadManager.DownLoadActivity"
+            android:label="@string/download_manager_title"
+            android:parentActivityName=".landing.LandingServiceActivity"
+            android:screenOrientation="portrait">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".landing.LandingServiceActivity" />
+        </activity>
+        <activity
+            android:name=".alarmManager.AlarmManagerActivity"
+            android:label="@string/alarm_manager_title"
+            android:parentActivityName=".landing.LandingServiceActivity"
+            android:screenOrientation="portrait">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".landing.LandingServiceActivity" />
+        </activity>
+        <activity
+            android:name=".foregroundService.ForegroundServiceActivity"
+            android:label="@string/foreground_service_title"
+            android:parentActivityName=".landing.LandingServiceActivity"
+            android:screenOrientation="portrait">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".landing.LandingServiceActivity" />
+        </activity>
+
+        <activity
+            android:name=".alarmManager.OrderLunchActivity"
+            android:label="@string/order_lunch_title"
+            android:parentActivityName=".landing.LandingServiceActivity"
+            android:screenOrientation="portrait">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".landing.LandingServiceActivity" />
+        </activity>
+
+        <provider
+            android:name="androidx.work.impl.WorkManagerInitializer"
+            android:authorities="com.noemi.android.serviceprovider.workmanager-init"
+            tools:node="remove" />
+
+        <service
+            android:name=".downLoadManager.DownloadPhotoManager"
+            android:exported="true"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
+
+        <receiver
+            android:name=".alarmManager.AlarmReceiver"
+            android:enabled="true" />
+
+        <service android:name=".foregroundService.ForegroundService" />
+    </application>
+
+</manifest>
