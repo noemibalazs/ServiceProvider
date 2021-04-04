@@ -1,8 +1,8 @@
 package com.noemi.android.serviceprovider.foregroundService
 
 import android.content.Intent
-import android.media.MediaPlayer
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
@@ -27,34 +27,17 @@ class ForegroundServiceActivity : AppCompatActivity() {
     }
 
     private fun startMusicService() {
+        Log.d(TAG, "startMusicService()")
+
         val intent = Intent(this, ForegroundService::class.java)
         intent.action = SHOW_NOTIFICATION
         ContextCompat.startForegroundService(this, intent)
     }
 
-    override fun onResume() {
-        super.onResume()
-        getIntentActions()
-    }
-
-    private fun getIntentActions() {
-        intent?.let {
-            handleAction(it.action)
-        }
-    }
-
-    private fun handleAction(action: String?) {
-        action?.let {
-            if (it == NOTIFICATION_PLAY_MUSIC) {
-                val player = MediaPlayer.create(this, R.raw.mj_who_is_it)
-                player.start()
-            }
-
-            if (it == NOTIFICATION_PAUSE_MUSIC) {
-                val player = MediaPlayer.create(this, R.raw.mj_who_is_it)
-                player.stop()
-            }
-        }
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.d(TAG, "stopService()")
+        stopService(Intent(this, ForegroundService::class.java))
     }
 
     companion object {

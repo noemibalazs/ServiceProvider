@@ -6,6 +6,7 @@ import android.app.PendingIntent
 import android.app.Service
 import android.content.Context
 import android.content.Intent
+import android.media.MediaPlayer
 import android.os.Build
 import android.os.IBinder
 import android.widget.RemoteViews
@@ -16,15 +17,41 @@ import com.noemi.android.serviceprovider.util.*
 @Suppress("DEPRECATION")
 class ForegroundService : Service() {
 
+    private lateinit var player: MediaPlayer
+    private var position = 0
+
+    override fun onCreate() {
+        super.onCreate()
+        player = MediaPlayer.create(this, R.raw.mj_who_is_it)
+    }
+
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         intent?.let {
-            if (it.action.equals(SHOW_NOTIFICATION)) {
-                onCreateForeGroundNotification()
-            }
 
-            if (it.action.equals(STOP_FOREGROUND_SERVICE)) {
-                stopSelf()
-                stopForeground(true)
+            when (it.action) {
+                SHOW_NOTIFICATION -> onCreateForeGroundNotification()
+
+                STOP_FOREGROUND_SERVICE -> {
+                    stopSelf()
+                    stopForeground(true)
+                }
+
+                NOTIFICATION_PLAY_MUSIC -> {
+                    if (!player.isPlaying) {
+                        player.start()
+                    } else {
+                        player.seekTo(position)
+                        player.start()
+                    }
+                }
+                NOTIFICATION_PAUSE_MUSIC -> {
+                    player.pause()
+                    position = player.currentPosition
+                }
+                else -> {
+                    player.release()
+                    player.stop()
+                }
             }
         }
         return START_NOT_STICKY
@@ -46,7 +73,7 @@ class ForegroundService : Service() {
         remoteView.setOnClickPendingIntent(R.id.ivStop, stop)
 
         val notification = NotificationCompat.Builder(this, FOREGROUND_ID).apply {
-            priority = NotificationCompat.PRIORITY_DEFAULT
+            priority = NotificationCompat.PRIORITY_HIGH
             setSmallIcon(R.drawable.icon)
         }.build()
 
@@ -59,17 +86,15 @@ class ForegroundService : Service() {
     }
 
     private fun getPlayIntent(): PendingIntent {
-        val play = Intent(this, ForegroundServiceActivity::class.java)
-        play.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+        val play = Intent(this, ForegroundService::class.java)
         play.action = NOTIFICATION_PLAY_MUSIC
-        return PendingIntent.getActivity(this, 3, play, PendingIntent.FLAG_UPDATE_CURRENT)
+        return PendingIntent.getService(this, 3, play, PendingIntent.FLAG_UPDATE_CURRENT)
     }
 
     private fun getPauseIntent(): PendingIntent {
-        val pause = Intent(this, ForegroundServiceActivity::class.java)
+        val pause = Intent(this, ForegroundService::class.java)
         pause.action = NOTIFICATION_PAUSE_MUSIC
-        pause.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-        return PendingIntent.getActivity(this, 6, pause, PendingIntent.FLAG_UPDATE_CURRENT)
+        return PendingIntent.getService(this, 6, pause, PendingIntent.FLAG_UPDATE_CURRENT)
     }
 
     private fun getStopIntent(): PendingIntent {
